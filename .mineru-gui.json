@@ -1,0 +1,8 @@
+{
+  "root": "E:\\MinerU",
+  "ports": {
+    "console": 7861,
+    "webui": 7860,
+    "api": 8000
+  }
+}

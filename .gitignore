@@ -1,0 +1,26 @@
+# ---- 运行时生成（安装器/启动器运行后产生）----
+.venv/
+models/
+.cache/
+.uv/
+.mineru/
+webapp/data/
+logs/
+gradio/
+mineru-kit-gradio-api-*/
+output/
+torchinductor_*/
+.cachetest/
+*.log
+
+# ---- 构建产物（build.ps1 重新生成）----
+install-gui/.build/
+install-gui/dist/
+install-gui/src/bundle/
+__pycache__/
+*.pyc
+
+# ---- 系统文件 ----
+Thumbs.db
+Desktop.ini
+.DS_Store

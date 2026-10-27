@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MinerU 本地版 · 工作台</title>
+<link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand"><span class="logo">M</span>MinerU <span class="ver">本地版</span></div>
+  <nav>
+    <a href="/" class="active">工作台</a>
+    <a href="/guide">使用教程</a>
+    <a href="http://127.0.0.1:7860" target="_blank" rel="noopener">原版 WebUI</a>
+  </nav>
+  <div class="status" id="statusPill"><span class="dot"></span><span id="statusText">检测服务…</span></div>
+</header>
+
+<main class="layout">
+  <section class="col">
+    <div class="card">
+      <h2><span class="num">1</span>上传文档</h2>
+      <div class="dropzone" id="dropzone">
+        <div class="dz-icon">⇪</div>
+        <p><b>点击上传</b> 或把文件拖到这里</p>
+        <p class="hint">PDF / 图片 / Word / PPT / Excel / HTML，单文件 ≤ 200MB</p>
+        <input type="file" id="fileInput" hidden
+               accept=".pdf,.png,.jpg,.jpeg,.bmp,.tif,.tiff,.webp,.docx,.pptx,.xlsx,.html,.htm,.mhtml,.mht,.epub,.ofd,.csv,.tsv,.rtf,.odt,.odp,.ods">
+      </div>
+      <ul class="file-list" id="fileList"></ul>
+    </div>
+
+    <div class="card">
+      <h2><span class="num">2</span>解析档位</h2>
+      <div class="tiers" id="tierList"></div>
+      <button class="primary" id="parseBtn" disabled>开始解析</button>
+      <div class="progress hidden" id="progress">
+        <div class="bar"><div id="barFill"></div></div>
+        <div class="phase"><span id="phaseText">等待中</span><span id="elapsedText"></span></div>
+        <details><summary>查看运行日志</summary><pre id="logBox"></pre></details>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2><span class="num">3</span>最近任务</h2>
+      <ul class="history" id="history"><li class="empty-hint">暂无历史记录</li></ul>
+    </div>
+  </section>
+
+  <section class="col">
+    <div class="card result-card">
+      <div class="result-head">
+        <div class="tabs">
+          <button data-tab="preview" class="active">预览</button>
+          <button data-tab="raw">Markdown 源码</button>
+        </div>
+        <div class="actions">
+          <button class="btn sm" id="downloadBtn" disabled>下载 .md</button>
+          <button class="btn sm" id="zipBtn" disabled>下载 ZIP</button>
+          <button class="btn sm" id="cancelBtn" disabled>取消</button>
+        </div>
+      </div>
+      <div class="empty" id="empty">
+        <div class="big">✦</div>
+        <p>上传文档并点击「开始解析」<br>解析结果会显示在这里</p>
+      </div>
+      <article class="markdown-body hidden" id="preview"></article>
+      <pre class="hidden" id="raw"></pre>
+    </div>
+  </section>
+</main>
+
+<footer>MinerU 4.0.12 · RTX 3070 GPU 加速 · 所有文件只在本机处理</footer>
+
+<script src="/static/marked.min.js"></script>
+<script src="/static/app.js"></script>
+</body>
+</html>

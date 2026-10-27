@@ -1,0 +1,14 @@
+{
+  "app": "minerU-gui",
+  "installed_at": "2026-10-27T03:12:04",
+  "root": "E:\\MinerU",
+  "python": "E:\\MinerU\\.venv\\Scripts\\python.exe",
+  "gpu": "NVIDIA GeForce RTX 3070",
+  "cuda_ok": true,
+  "with_models": true,
+  "ports": {
+    "console": 7861,
+    "webui": 7860,
+    "api": 8000
+  }
+}

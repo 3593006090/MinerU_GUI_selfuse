@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MinerU 本地版 · 使用教程</title>
+<link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand"><span class="logo">M</span>MinerU <span class="ver">本地版</span></div>
+  <nav>
+    <a href="/">工作台</a>
+    <a href="/guide" class="active">使用教程</a>
+    <a href="http://127.0.0.1:7860" target="_blank" rel="noopener">原版 WebUI</a>
+  </nav>
+  <div class="status"><span class="dot ok"></span><span>MinerU 4.0.12 · RTX 3070</span></div>
+</header>
+
+<main class="guide">
+
+  <section class="hero">
+    <h1>3 分钟上手本地 MinerU</h1>
+    <p>这份教程带你从「启动」到「解析出第一篇文档」，每一步都可以直接试。</p>
+    <div class="tags">
+      <span class="tag">文件不出本机</span>
+      <span class="tag">RTX 3070 GPU 加速</span>
+      <span class="tag">PDF / 图片 / Office</span>
+      <span class="tag">Markdown 输出</span>
+    </div>
+  </section>
+
+  <section class="gsec">
+    <h2><span class="step">1</span>启动服务（已安装，只需知道怎么开）</h2>
+    <div class="gcard">
+      <p style="margin-top:0">这个操作台由两部分组成：<b>后端服务</b>（端口 7861）+ <b>页面</b>。双击下面这个脚本即可启动：</p>
+      <div class="code"><button class="copy">复制</button>E:\MinerU\start-console.cmd</div>
+      <p>启动后浏览器访问 <a href="http://127.0.0.1:7861" target="_blank">http://127.0.0.1:7861</a>。想用命令行解析，也可以直接运行：</p>
+      <div class="code"><button class="copy">复制</button>E:\MinerU\bin\mineru-kit.cmd parse D:\docs\paper.pdf -o D:\out\paper.md --tier standard</div>
+      <div class="note">原版 Gradio WebUI（端口 7860，双击 <span class="kbd">start-webui.cmd</span>）也保留着，两者可以同时使用。</div>
+      <div class="note">关闭服务：双击 <span class="kbd">stop-console.cmd</span>（操作台）或 <span class="kbd">stop-webui.cmd</span>（原版 WebUI）即可，脚本会把占端口的子进程一起清理干净。</div>
+    </div>
+  </section>
+
+  <section class="gsec">
+    <h2><span class="step">2</span>三步解析一篇文档</h2>
+    <div class="gcard">
+      <p style="margin-top:0"><b>① 上传</b>：在工作台左侧点上传框，或把文件拖进去（支持 PDF、图片、Word、PPT、Excel、HTML 等）。</p>
+      <p><b>② 选档位</b>：默认 <b>Standard</b> 即可，它会同时用小模型和 VLM，版面、公式、表格效果最好。</p>
+      <p><b>③ 开始解析</b>：点按钮后可以看到实时阶段和日志。单页 A4 大约 8 秒；首次使用需要加载模型，会多几秒。</p>
+      <p>完成后右侧会显示 Markdown 预览，可切换「Markdown 源码」，并可下载 .md 或整个结果 ZIP。</p>
+      <div class="note">Office 文档（docx/pptx/xlsx 等）会自动走 flash 快速通道，这是 MinerU 的固定行为，不是出错。</div>
+    </div>
+  </section>
+
+  <section class="gsec">
+    <h2><span class="step">3</span>选对档位，速度与质量兼得</h2>
+    <div class="gcard">
+      <div class="tier-grid" id="tierGrid">
+        <div class="tg" data-key="flash"><h4>Flash</h4><p>只提取 PDF 原生文本层，不跑模型</p><div class="speed">约 1 秒/页</div></div>
+        <div class="tg" data-key="basic"><h4>Basic</h4><p>小模型 OCR / 版面 / 表格，不需要 VLM</p><div class="speed">约 3 秒/页</div></div>
+        <div class="tg on" data-key="standard"><h4>Standard</h4><p>小模型 + VLM，复杂版面、公式、表格质量最好</p><div class="speed">约 8 秒/页 · 推荐</div></div>
+        <div class="tg" data-key="advanced"><h4>Advanced</h4><p>更多推理计算，追求极致质量</p><div class="speed">约 15 秒/页</div></div>
+      </div>
+      <div class="tier-detail" id="tierDetail">Standard：适合论文、报告、教材等复杂版式。电子版 PDF 也可以先试 Flash 快速预览。</div>
+    </div>
+  </section>
+
+  <section class="gsec">
+    <h2><span class="step">4</span>现场演示：解析一份示例 PDF</h2>
+    <div class="gcard demo-box">
+      <p style="margin:0">点击按钮，后台会真的调用本地模型解析内置示例文档（约 10~20 秒），你可以看到完整流程与结果。</p>
+      <div class="demo-actions">
+        <button class="primary" id="demoBtn" style="width:auto;margin:0">一键解析示例文档（Standard）</button>
+        <span class="demo-status" id="demoStatus">未开始</span>
+      </div>
+      <div class="demo-out markdown-body" id="demoOut"></div>
+    </div>
+  </section>
+
+  <section class="gsec">
+    <h2><span class="step">5</span>命令行与 API 调用</h2>
+    <div class="gcard">
+      <p style="margin-top:0"><b>命令行解析</b>（适合批量处理）：</p>
+      <div class="code"><button class="copy">复制</button>REM 单个文件 → 指定 Markdown 输出
+E:\MinerU\bin\mineru-kit.cmd parse D:\in\paper.pdf -o D:\out\paper.md --tier standard
+
+REM 整个目录 → 打包输出
+E:\MinerU\bin\mineru-kit.cmd parse D:\in -o D:\out --format zip</div>
+
+      <p><b>HTTP 接口</b>（适合程序集成，本操作台自己也用它）：</p>
+      <div class="code"><button class="copy">复制</button># 1. 上传文件
+curl -F "file=@D:\in\paper.pdf" http://127.0.0.1:7861/api/upload
+
+# 2. 创建解析任务（用上一步返回的 file_id）
+curl -F "file_id=返回的file_id" -F "tier=standard" http://127.0.0.1:7861/api/tasks
+
+# 3. 轮询结果（返回 markdown 字段）
+curl http://127.0.0.1:7861/api/tasks/任务ID</div>
+
+      <p><b>Python SDK</b>（虚拟环境内）：</p>
+      <div class="code"><button class="copy">复制</button>from mineru import parse
+result = parse(r"D:\in\paper.pdf", tier="standard")
+print(result.markdown)</div>
+    </div>
+  </section>
+
+  <section class="gsec">
+    <h2><span class="step">6</span>给 DeepSeek Harness / 其他 AI 助手使用</h2>
+    <div class="gcard">
+      <p style="margin-top:0">如果你想让 DeepSeek Harness 以后直接调用这个本地 MinerU，把这份说明交给它即可：</p>
+      <div class="code"><button class="copy">复制</button>E:\MinerU\DSH-集成说明.md</div>
+      <p>里面写明了路径、启动命令、HTTP 接口契约、返回字段和常见坑（显存、缓存目录、Office 档位）。</p>
+    </div>
+  </section>
+
+  <section class="gsec">
+    <h2><span class="step">7</span>常见问题</h2>
+    <details class="faq"><summary>解析很慢 / 卡在「加载模型」？</summary>
+      <p>每次命令行解析都会重新加载模型，第一次通常 5~10 秒。8GB 显存下建议一次只跑一个任务；同时开游戏或视频渲染可能显存不足。</p>
+    </details>
+    <details class="faq"><summary>为什么上传 Word/PPT 后档位变成 flash？</summary>
+      <p>MinerU 4.0 中 Office、HTML、EPUB 等格式固定走本地 flash 解析（原生结构转换），只有 PDF 和图片支持 basic/standard/advanced 档位。</p>
+    </details>
+    <details class="faq"><summary>扫描件 PDF 效果不好？</summary>
+      <p>扫描件请用 Standard 档位（VLM 会处理），不要用 Flash——Flash 只读文本层，扫描件没有文本层。如果扫描质量很差，解析前先保证图片清晰、倾斜校正。</p>
+    </details>
+    <details class="faq"><summary>结果里的图片为什么是 base64？</summary>
+      <p>MinerU 4.0 的 Markdown 会把图片内嵌为 data URI，好处是单个 .md 文件即可完整预览和分享。需要单独图片文件时下载 ZIP 即可。</p>
+    </details>
+    <details class="faq"><summary>能离线使用吗？</summary>
+      <p>可以。模型已在 <span class="kbd">E:\MinerU\models</span> 下载校验完毕，解析全程本地推理，不联网、不上传。</p>
+    </details>
+  </section>
+
+</main>
+
+<script src="/static/marked.min.js"></script>
+<script src="/static/guide.js"></script>
+</body>
+</html>
